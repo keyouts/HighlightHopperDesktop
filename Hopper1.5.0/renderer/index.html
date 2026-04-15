@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Highlight Hopper</title>
+  <link rel="stylesheet" href="ui.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <div id="left-panel">
+      <h1>Highlight Hopper</h1>
+      <button id="load-btn">Load Highlights</button>
+      <button id="save-btn">Save Highlights</button>
+      <button id="import-btn">Import CSV</button>
+      <button id="export-btn">Export CSV</button>
+      <button id="timeline-toggle">Timeline View</button>
+      <button id="pinboard-toggle">Pinboard View</button>
+      <input type="file" id="file-input" accept=".csv">
+      <input id="search-input" type="text" placeholder="Search highlights..." aria-label="Search highlights">
+      <div class="tag-filter-label">Filter by tag</div>
+      <div id="tag-filter-container" aria-label="Tag filters"></div>
+    </div>
+    <div id="right-panel">
+      <div id="timeline-panel">
+        <div id="timeline-color-filter" aria-label="Timeline color filters"></div>
+      </div>
+      <div id="pinboard-panel">
+        <div id="pinboard-controls" aria-label="Pinboard controls">
+          <button id="pinboard-connect-btn" type="button">Connect Mode</button>
+          <button id="pinboard-clear-selection-btn" type="button">Clear Selection</button>
+          <button id="pinboard-delete-connection-btn" type="button">Delete Selected Line</button>
+        </div>
+        <div id="pinboard-canvas" aria-label="Pinboard canvas"></div>
+      </div>
+      <div id="table" aria-live="polite"></div>
+    </div>
+  </div>
+  <div id="aria-live" class="visually-hidden" aria-live="polite"></div>
+  <script src="index.js"></script>
+</body>
+</html>
