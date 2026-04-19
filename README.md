@@ -1,6 +1,8 @@
 Highlight Hopper (Desktop)
 
-
+![ImageAlt](https://github.com/keyouts/HighlightHopperDesktop/blob/5d1103b8091d91cdbd8df672e1949fbc1eb2ea00/HopperDash.png)
+![ImageAlt](https://github.com/keyouts/HighlightHopperDesktop/blob/5d1103b8091d91cdbd8df672e1949fbc1eb2ea00/HopperPinboard.png)
+![ImageAlt](https://github.com/keyouts/HighlightHopperDesktop/blob/5d1103b8091d91cdbd8df672e1949fbc1eb2ea00/HopperTimeline.png)
 
 A desktop viewer for Highlight Hopper CSV exports.
 
