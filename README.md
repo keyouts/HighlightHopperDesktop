@@ -72,7 +72,7 @@ Open the installer and launch the app.
 
 **Install Node.js if needed.
 
-**From Hopper1.5.0 folder, run command / console prompt. (cmd)
+**From Hopper1.5.0 folder, run command / console prompt in address bar. (cmd)
 
 
 ***npm install***
