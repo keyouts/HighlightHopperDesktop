@@ -68,12 +68,11 @@ Open the installer and launch the app.
 
 
 
-**Development:**
+**Start Application:**
 
+**Install Node.js if needed.
 
-
-*Clone the repo and run:*
-
+**From Hopper1.5.0 folder, run command / console prompt. (cmd)
 
 
 ***npm install***
@@ -82,7 +81,7 @@ Open the installer and launch the app.
 
 
 
-*Build a distributable:*
+*Build Application:*
 
 
 
