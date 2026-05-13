@@ -4,90 +4,74 @@ Highlight Hopper (Desktop)
 ![ImageAlt](https://github.com/keyouts/HighlightHopperDesktop/blob/5d1103b8091d91cdbd8df672e1949fbc1eb2ea00/HopperPinboard.png)
 ![ImageAlt](https://github.com/keyouts/HighlightHopperDesktop/blob/5d1103b8091d91cdbd8df672e1949fbc1eb2ea00/HopperTimeline.png)
 
+# Highlight Hopper Desktop
+
 A desktop viewer for Highlight Hopper CSV exports.
 
 Load your highlights, browse them by URL, filter by tag, and explore them on a timeline.
 
+---
 
+## Download
 
+Go to the **Releases** page and download the installer for your operating system.
 
+### Supported Installers
 
-**Download:**
+- **Windows** — `.exe`
+- **macOS** — `.dmg`
+- **Linux** — `.AppImage`
 
+After downloading:
 
+1. Open the installer
+2. Install the application
+3. Launch the app
 
-Go to the Releases page and download the installer for your operating system.
+---
 
+## How to Use
 
+1. Open the app
+2. Click **Load Highlights**
+3. Select a CSV exported from the Highlight Hopper browser extension
+4. Browse highlights grouped by URL
+5. Use:
+   - Search
+   - Tag filters
+   - Color filters
+6. Switch to **Timeline View** to explore highlights over time
+7. Use the trash icon to delete a highlight
+8. Use **Export CSV** to save edited highlights
 
-&#x20;   Windows: .exe
+---
 
+## Running the Application
 
+### Install Dependencies
 
-&#x20;   macOS: .dmg
+Install Node.js if needed.
 
+From the `Hopper1.5.0` folder, open a command prompt or terminal and run:
 
+```bash
+npm install
+```
 
-&#x20;   Linux: .AppImage
+### Start the App
 
+```bash
+npm start
+```
 
+---
 
-Open the installer and launch the app.
+## Building the Application
 
+To create a packaged build:
 
+```bash
+npm run build
+```
 
-**How to Use:**
-
-
-
-&#x20;   Open the app.
-
-
-
-&#x20;   Click Load Highlights and select a CSV exported from the Highlight Hopper browser extension.
-
-
-
-&#x20;   Browse highlights grouped by URL.
-
-
-
-&#x20;   Use search, tag filters, and color filters to narrow things down.
-
-
-
-&#x20;   Switch to Timeline View to see highlights over time.
-
-
-
-&#x20;   Use the trash icon to delete a highlight.
-
-
-
-&#x20;   Use Export CSV to save your edited highlights.
-
-
-
-**Start Application:**
-
-**Install Node.js if needed.
-
-**From Hopper1.5.0 folder, run command / console prompt in address bar. (cmd)
-
-
-***npm install***
-
-***npm start***
-
-
-
-*Build Application:*
-
-
-
-***npm run build***
-
-
-
-The built app will appear in the output folder created by your build tool.
-
+The built application will appear in the output folder created by your build tool.
