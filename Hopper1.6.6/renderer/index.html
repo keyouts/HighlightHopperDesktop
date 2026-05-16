@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Highlight Hopper</title>
+  <link rel="stylesheet" href="ui.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <div id="left-panel">
+      <h1>Highlight Hopper</h1>
+
+
+      <!-- Load Logic -->
+      <button id="load-btn" type="button" aria-label="Load highlights">Load Highlights</button>
+
+
+      <!-- Save Logic -->
+      <button id="save-btn" type="button" aria-label="Save highlights">Save Highlights</button>
+      <button id="import-btn" type="button" aria-label="Import CSV file">Import CSV</button>
+
+
+      <!-- Export Actions -->
+      <button id="export-btn" type="button" aria-label="Export CSV file">Export CSV</button>
+      <button id="export-json-btn" type="button" aria-label="Export JSON file">Export JSON</button>
+      <button id="export-md-btn" type="button" aria-label="Export Markdown file">Export Markdown</button>
+      <button id="timeline-toggle" type="button" aria-label="Open timeline view">Timeline View</button>
+
+
+      <!-- Pinboard Logic -->
+      <button id="pinboard-toggle" type="button" aria-label="Open pinboard view">Pinboard View</button>
+      <input type="file" id="file-input" accept=".csv" aria-label="Choose CSV file">
+
+
+      <!-- Search Logic -->
+      <input id="search-input" type="text" placeholder="Search highlights..." aria-label="Search highlights">
+
+
+      <!-- Filter Logic -->
+      <div class="tag-filter-label">Filter by tag</div>
+      <div id="tag-filter-container" aria-label="Tag filters"></div>
+    </div>
+    <div id="right-panel">
+      <div id="timeline-panel">
+        <div id="timeline-color-filter" aria-label="Timeline color filters"></div>
+      </div>
+      <div id="pinboard-panel">
+        <div id="pinboard-controls" aria-label="Pinboard controls">
+
+
+          <!-- Connection Logic -->
+          <button id="pinboard-connect-btn" type="button" aria-label="Toggle connect mode">Connect Mode</button>
+          <button id="pinboard-clear-selection-btn" type="button" aria-label="Clear selected pinboard item">Clear Selection</button>
+          <button id="pinboard-delete-connection-btn" type="button" aria-label="Delete selected connection line">Delete Selected Line</button>
+          <button id="pinboard-edit-connection-btn" type="button" aria-label="Edit selected connection note">Edit Line Note</button>
+          <button id="pinboard-export-svg-btn" type="button" aria-label="Export idea board as SVG">Export Board SVG</button>
+          <button id="pinboard-export-png-btn" type="button" aria-label="Export idea board as PNG">Export Board PNG</button>
+        </div>
+        <div id="pinboard-canvas" aria-label="Pinboard canvas"></div>
+      </div>
+      <div id="table" aria-live="polite"></div>
+    </div>
+  </div>
+  <div id="aria-live" class="visually-hidden" aria-live="polite"></div>
+  <script src="index.js"></script>
+</body>
+</html>
