@@ -1,0 +1,52 @@
+{
+  "name": "highlight-hopper-desktop",
+  "version": "1.6.11",
+  "main": "main.js",
+  "private": true,
+  "author": "KeyOuts",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "check": "node --check main.js && node --check preload.js && node --check renderer/index.js && node --check renderer/transfer.js && node --check renderer/board-export.js && node --check renderer/ui-settings.js && node --check security/state.js",
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "electron": "42.7.1",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.hopper.desktop",
+    "productName": "Highlight Hopper Desktop",
+    "directories": {
+      "output": "dist",
+      "buildResources": "."
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json",
+      "renderer/**/*",
+      "security/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "icon.ico",
+        "to": "icon.ico"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true
+    },
+    "asar": true
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
