@@ -1,0 +1,21 @@
+const test = require("node:test")
+const assert = require("node:assert/strict")
+const fs = require("node:fs")
+const path = require("node:path")
+
+const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"))
+const npmConfig = fs.readFileSync(path.join(__dirname, "..", ".npmrc"), "utf8")
+
+test("keeps the Windows installer contract", () => {
+  assert.equal(pkg.version, "1.6.12")
+  assert.equal(pkg.scripts.build, "electron-builder --win nsis")
+  assert.match(npmConfig, /^include=dev\s*$/m)
+  assert.equal(pkg.build.win.target, "nsis")
+  assert.equal(pkg.build.win.icon, "icon.ico")
+  assert.equal(pkg.build.nsis.createDesktopShortcut, "always")
+  assert.equal(pkg.build.nsis.createStartMenuShortcut, true)
+  assert.equal(pkg.build.nsis.shortcutName, "Highlight Hopper Desktop")
+  assert.equal(pkg.build.nsis.installerIcon, "icon.ico")
+  assert.equal(pkg.build.nsis.uninstallerIcon, "icon.ico")
+  assert.equal(pkg.build.nsis.runAfterFinish, true)
+})
