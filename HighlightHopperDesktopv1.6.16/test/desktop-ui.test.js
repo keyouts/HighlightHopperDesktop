@@ -1,0 +1,118 @@
+const test = require("node:test")
+const assert = require("node:assert/strict")
+const fs = require("node:fs")
+const path = require("node:path")
+
+function read(relativePath) {
+  return fs.readFileSync(path.join(__dirname, "..", relativePath), "utf8")
+}
+
+test("exposes editable research controls", () => {
+  const html = read("renderer/index.html")
+  const script = read("renderer/index.js")
+  assert.match(html, /id="library-filter"/)
+  assert.match(html, /id="library-sort"/)
+  assert.match(html, /id="edit-highlight-overlay"/)
+  assert.match(html, /id="edit-title-overlay"/)
+  assert.match(script, /openSourceTitleEditor/)
+  assert.match(script, /openHighlightEditor/)
+  assert.match(script, /pageTitle: limitString\(editHighlightPageTitle\.value, 300\)/)
+  assert.match(script, /color = normalizeColor\(editHighlightColor\.value\)/)
+})
+
+test("keeps library view preferences local", () => {
+  const script = read("renderer/index.js")
+  assert.match(script, /highlightHopperDesktop\.libraryView\.v1/)
+  assert.match(script, /localStorage\.setItem\(libraryViewKey/)
+  assert.match(script, /pinned.*notes.*untagged/s)
+  assert.match(script, /title-asc.*title-desc.*newest.*oldest/s)
+})
+
+test("includes accessible interaction paths", () => {
+  const html = read("renderer/index.html")
+  const script = read("renderer/index.js")
+  assert.match(html, /aria-describedby="library-help"/)
+  assert.match(html, /aria-modal="true"/)
+  assert.match(html, /aria-atomic="true"/)
+  assert.match(script, /event\.key === "F2"/)
+  assert.match(script, /trapModalTab/)
+  assert.match(script, /setAttribute\("aria-pressed"/)
+})
+
+test("provides bounded accessibility settings", () => {
+  const settings = require("../renderer/ui-settings")
+  const normalized = settings.normalizeSettings({ highContrast: "on", strongFocus: "on", feedback: "off" })
+  assert.equal(normalized.highContrast, "on")
+  assert.equal(normalized.strongFocus, "on")
+  assert.equal(normalized.feedback, "off")
+  assert.equal(settings.normalizeSettings({ highContrast: "maybe" }).highContrast, "off")
+})
+
+
+test("restores pinning and note copy interactions", () => {
+  const script = read("renderer/index.js")
+  const css = read("renderer/ui.css")
+  assert.match(script, /pinBtn\.className = "highlight-pin-btn"/)
+  assert.match(script, /pinBtn\.textContent = "📌"/)
+  assert.match(script, /togglePinHighlight\(entry\.id\)/)
+  assert.doesNotMatch(script, /actions\.appendChild\(pinBtn\)/)
+  assert.match(script, /flashCopied\(noteDiv, "Note copied!"\)/)
+  assert.match(script, /if \(!noteText\) \{[\s\S]*openHighlightEditor\(entry\.id\)/)
+  assert.match(css, /\*::\-webkit-scrollbar/)
+  assert.match(css, /scrollbar-color:\s*#000 #fff/)
+})
+
+
+test("keeps pinboard line styles and image controls", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "renderer", "index.html"), "utf8")
+  const js = fs.readFileSync(path.join(__dirname, "..", "renderer", "index.js"), "utf8")
+  const css = fs.readFileSync(path.join(__dirname, "..", "renderer", "ui.css"), "utf8")
+  assert.match(html, /pinboard-add-image-btn/)
+  assert.match(js, /connectionStyles = \["solid", "dashed", "dotted", "heavy", "animated"\]/)
+  assert.match(js, /pinboardImages/)
+  assert.match(css, /line-style-animated/)
+  assert.match(css, /pinboard-image-card/)
+})
+
+
+test("themes selects and expands pinboard focus", () => {
+  const html = read("renderer/index.html")
+  const script = read("renderer/index.js")
+  const css = read("renderer/ui.css")
+  assert.match(html, /id="pinboard-focus-btn"/)
+  assert.match(html, /aria-keyshortcuts="Control\+Shift\+F Meta\+Shift\+F"/)
+  assert.match(script, /function setPinboardFocusMode\(enabled, shouldAnnounce = true\)/)
+  assert.match(script, /document\.body\.classList\.toggle\("pinboard-focus", next\)/)
+  assert.match(script, /focusShortcut.*event\.shiftKey.*event\.key\.toLowerCase\(\) === "f"/s)
+  assert.match(css, /\/\* Select Styles \*\//)
+  assert.match(css, /select \{[\s\S]*appearance: none;[\s\S]*border: 3px solid #000;[\s\S]*background-image:[\s\S]*box-shadow: 3px 3px 0 #000;/)
+  assert.match(css, /\.connection-popup select \{[\s\S]*border: 3px solid #000;[\s\S]*box-shadow: 3px 3px 0 #000;/)
+  assert.match(css, /\.settings-group select \{[\s\S]*border: 3px solid #000;[\s\S]*box-shadow: 3px 3px 0 #000;/)
+  assert.match(css, /body\.pinboard-focus #left-panel,[\s\S]*body\.pinboard-focus #workspace-status[\s\S]*display: none;/)
+  assert.match(css, /body\.pinboard-focus #right-panel[\s\S]*width: 100vw;[\s\S]*height: 100vh;/)
+})
+
+test("expands timeline research navigation", () => {
+  const html = read("renderer/index.html")
+  const script = read("renderer/index.js")
+  const css = read("renderer/ui.css")
+  assert.match(html, /id="timeline-layout"/)
+  assert.match(html, /value="chronological"[\s\S]*value="sources"[\s\S]*value="sessions"/)
+  assert.match(html, /id="timeline-zoom"/)
+  assert.match(html, /id="timeline-source"/)
+  assert.match(html, /id="timeline-content-filter"/)
+  assert.match(html, /id="timeline-focus-btn"/)
+  assert.match(html, /id="timeline-detail"/)
+  assert.match(script, /highlightHopperDesktop\.timelineView\.v1/)
+  assert.match(script, /function buildTimelineClusters/)
+  assert.match(script, /function buildTimelineSessions/)
+  assert.match(script, /function renderSourceTimeline/)
+  assert.match(script, /function renderTimelineDetail/)
+  assert.match(script, /function handleTimelineMarkerKeys/)
+  assert.match(script, /function setTimelineFocusMode\(enabled, shouldAnnounce = true\)/)
+  assert.match(script, /document\.body\.classList\.toggle\("timeline-focus", next\)/)
+  assert.match(css, /body\.timeline-focus #left-panel,[\s\S]*body\.timeline-focus #workspace-status[\s\S]*display: none;/)
+  assert.match(css, /\.timeline-cluster/)
+  assert.match(css, /\.timeline-session-card/)
+  assert.match(css, /#timeline-detail/)
+})

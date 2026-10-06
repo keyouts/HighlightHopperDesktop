@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'; worker-src 'none'">
+  <title>Highlight Hopper Desktop</title>
+  <link rel="stylesheet" href="ui.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <aside id="left-panel" aria-label="Highlight Hopper Desktop controls">
+      <!-- Header Area -->
+      <div class="brand-row">
+        <h1>Highlight Hopper</h1>
+        <button id="settings-btn" class="icon-button" type="button" aria-label="Open settings" aria-haspopup="dialog" title="Settings">⚙</button>
+      </div>
+      <div class="desktop-label">Desktop</div>
+      <div class="ecosystem-flow" aria-label="Hopper ecosystem workflow">
+        <span>Browser</span><span aria-hidden="true">→</span><strong>Desktop</strong><span aria-hidden="true">→</span><span>Note</span>
+      </div>
+
+      <!-- Data Actions -->
+      <section class="panel-group" aria-labelledby="library-heading">
+        <h2 id="library-heading">Library</h2>
+        <div class="button-grid">
+          <button id="load-btn" type="button" aria-label="Reload saved highlight library">Reload</button>
+          <button id="save-btn" type="button" aria-label="Save highlight library">Save</button>
+        </div>
+        <button id="import-btn" type="button" aria-label="Import Highlight Hopper CSV or JSON file">Import Hopper File</button>
+        <input type="file" id="file-input" accept=".csv,.json,text/csv,application/json" aria-label="Choose Highlight Hopper CSV or JSON file">
+      </section>
+
+      <!-- Export Actions -->
+      <section class="panel-group" aria-labelledby="export-heading">
+        <h2 id="export-heading">Export</h2>
+        <button id="export-btn" type="button" aria-label="Export highlights as Hopper Note compatible CSV">Hopper Note CSV</button>
+        <button id="export-json-btn" type="button" aria-label="Export universal Highlight Hopper backup JSON">Hopper Backup JSON</button>
+        <button id="export-md-btn" type="button" aria-label="Export highlights as Markdown">Markdown</button>
+      </section>
+
+      <!-- View Actions -->
+      <section class="panel-group" aria-labelledby="workspace-heading">
+        <h2 id="workspace-heading">Workspace</h2>
+        <button id="timeline-toggle" type="button" aria-label="Open timeline view" aria-pressed="false">Timeline View</button>
+        <button id="pinboard-toggle" type="button" aria-label="Open pinboard view" aria-pressed="false">Pinboard View</button>
+      </section>
+
+      <!-- Search Logic -->
+      <label class="visually-hidden" for="search-input">Search highlights</label>
+      <input id="search-input" type="search" placeholder="Search highlights..." aria-label="Search highlight text, notes, page titles, and sources">
+
+      <!-- Library Tools -->
+      <section class="panel-group library-tools" aria-labelledby="organize-heading">
+        <h2 id="organize-heading">Organize</h2>
+        <label class="compact-label" for="library-filter">Show</label>
+        <select id="library-filter" aria-describedby="library-help">
+          <option value="all">All highlights</option>
+          <option value="pinned">Pinned only</option>
+          <option value="notes">With notes</option>
+          <option value="untagged">Without tags</option>
+        </select>
+        <label class="compact-label" for="library-sort">Sort sources</label>
+        <select id="library-sort" aria-describedby="library-help">
+          <option value="title-asc">Title A–Z</option>
+          <option value="title-desc">Title Z–A</option>
+          <option value="newest">Newest activity</option>
+          <option value="oldest">Oldest activity</option>
+        </select>
+        <div class="button-grid">
+          <button id="expand-all-btn" type="button">Expand All</button>
+          <button id="collapse-all-btn" type="button">Collapse All</button>
+        </div>
+      </section>
+
+      <!-- Filter Logic -->
+      <div class="tag-filter-label" id="tag-filter-label">Filter by tag</div>
+      <div id="tag-filter-container" aria-labelledby="tag-filter-label"></div>
+      <p id="library-help" class="visually-hidden">Source groups can be expanded with Enter or Space. Use Edit Title to rename a source. Highlight action buttons provide editing, pinning, opening, and deletion without pointer-only gestures.</p>
+    </aside>
+
+    <main id="right-panel">
+      <!-- Workspace Status -->
+      <div id="workspace-status" class="workspace-status" aria-live="polite">
+        <div>
+          <strong id="workspace-mode">Library</strong>
+          <span id="workspace-counts">0 highlights · 0 sources · 0 pinned</span>
+        </div>
+        <div id="workspace-hint">Highlight Hopper Desktop is your explore-and-connect workspace.</div>
+      </div>
+
+      <div id="timeline-panel" aria-describedby="timeline-help">
+        <!-- Timeline Controls -->
+        <div id="timeline-controls" aria-label="Timeline controls">
+          <label>Layout
+            <select id="timeline-layout" aria-label="Timeline layout">
+              <option value="chronological">Chronological</option>
+              <option value="sources">Sources</option>
+              <option value="sessions">Sessions</option>
+            </select>
+          </label>
+          <label>Zoom
+            <select id="timeline-zoom" aria-label="Timeline zoom">
+              <option value="day">Day</option>
+              <option value="week">Week</option>
+              <option value="month">Month</option>
+              <option value="all">All Time</option>
+            </select>
+          </label>
+          <label>Source
+            <select id="timeline-source" aria-label="Filter timeline by source">
+              <option value="all">All Sources</option>
+            </select>
+          </label>
+          <label>Show
+            <select id="timeline-content-filter" aria-label="Filter timeline by highlight state">
+              <option value="all">All highlights</option>
+              <option value="notes">With notes</option>
+              <option value="pinned">Pinned</option>
+              <option value="untagged">Without tags</option>
+            </select>
+          </label>
+          <div class="timeline-jump-controls" aria-label="Timeline navigation">
+            <button id="timeline-prev-btn" type="button" aria-label="Move to previous timeline activity">Previous</button>
+            <button id="timeline-next-btn" type="button" aria-label="Move to next timeline activity">Next</button>
+            <button id="timeline-latest-btn" type="button" aria-label="Move to latest timeline activity">Latest</button>
+            <button id="timeline-focus-btn" type="button" aria-label="Enter timeline focus mode" aria-pressed="false" aria-keyshortcuts="Control+Shift+F Meta+Shift+F">Focus Mode</button>
+          </div>
+        </div>
+        <div id="timeline-color-filter" aria-label="Timeline color filters"></div>
+        <div id="timeline-content" aria-label="Research timeline"></div>
+        <div id="timeline-detail" aria-live="polite" hidden></div>
+        <p id="timeline-help" class="visually-hidden">Use the layout and zoom controls to explore research over time. Timeline markers can be navigated with arrow keys. Enter opens a highlight detail card. Focus Mode expands the timeline and can be toggled with Control or Command, Shift, and F.</p>
+      </div>
+      <div id="pinboard-panel">
+        <div id="pinboard-controls" aria-label="Pinboard controls">
+          <!-- Connection Logic -->
+          <button id="pinboard-connect-btn" type="button" aria-label="Toggle connect mode" aria-pressed="false">Connect Mode</button>
+          <button id="pinboard-clear-selection-btn" type="button" aria-label="Clear selected pinboard item">Clear Selection</button>
+          <button id="pinboard-delete-connection-btn" type="button" aria-label="Delete selected connection line">Delete Selected Line</button>
+          <button id="pinboard-edit-connection-btn" type="button" aria-label="Edit selected connection style, color, and note">Edit Line</button>
+          <button id="pinboard-add-image-btn" type="button" aria-label="Add image to pinboard">Add Image</button>
+          <button id="pinboard-focus-btn" type="button" aria-label="Enter pinboard focus mode" aria-pressed="false" aria-keyshortcuts="Control+Shift+F Meta+Shift+F">Focus Mode</button>
+          <input id="pinboard-image-input" class="visually-hidden" type="file" accept="image/png,image/jpeg,image/webp,image/gif" aria-label="Choose image for pinboard">
+          <!-- Export Menu -->
+          <div id="pinboard-export-wrap" class="pinboard-export-wrap">
+            <button id="pinboard-export-btn" type="button" aria-label="Open pinboard export options" aria-haspopup="menu" aria-expanded="false">Export ▾</button>
+            <div id="pinboard-export-menu" class="pinboard-export-menu" role="menu" aria-label="Pinboard export options" hidden>
+              <button id="pinboard-export-view-png-btn" type="button" role="menuitem">Current View PNG</button>
+              <button id="pinboard-export-full-png-btn" type="button" role="menuitem">Full Board PNG</button>
+              <button id="pinboard-export-view-svg-btn" type="button" role="menuitem">Current View SVG</button>
+              <button id="pinboard-export-full-svg-btn" type="button" role="menuitem">Full Board SVG</button>
+            </div>
+          </div>
+        </div>
+        <div id="pinboard-canvas" aria-label="Pinboard canvas" aria-describedby="pinboard-help"></div>
+        <p id="pinboard-help" class="visually-hidden">Pinned highlights and images can be moved on the board. Use arrow keys on a focused card to move it. Select a connection and choose Edit Line to change its type, style, color, or note. Focus Mode expands the pinboard and can be toggled with Control or Command, Shift, and F.</p>
+      </div>
+      <div id="table" aria-live="polite" aria-label="Highlight library" aria-describedby="library-help"></div>
+    </main>
+  </div>
+
+  <!-- Settings Dialog -->
+  <div id="settings-overlay" class="modal-backdrop" hidden>
+    <section class="settings-dialog" role="dialog" aria-modal="true" aria-labelledby="settings-title" aria-describedby="settings-description">
+      <div class="settings-heading">
+        <div>
+          <h2 id="settings-title">Settings</h2>
+          <p id="settings-description">Adjust the interface without changing highlight content.</p>
+        </div>
+        <button id="settings-close-btn" class="icon-button" type="button" aria-label="Close settings">×</button>
+      </div>
+
+      <div id="settings-preview" class="settings-preview" aria-label="Settings preview">
+        <div class="settings-preview-left">Hopper</div>
+        <div class="settings-preview-main"><span>Highlight workspace</span></div>
+      </div>
+
+      <div class="settings-grid">
+        <fieldset class="settings-group">
+          <legend>Colors</legend>
+          <label>Control panel<select id="setting-left-panel"><option value="white">White</option><option value="cream">Cream</option><option value="blue">Blue</option><option value="green">Green</option><option value="pink">Pink</option><option value="lavender">Lavender</option><option value="gray">Gray</option></select></label>
+          <label>Workspace<select id="setting-workspace"><option value="white">White</option><option value="paper">Paper</option><option value="cream">Cream</option><option value="blue">Blue</option><option value="green">Green</option><option value="pink">Pink</option><option value="lavender">Lavender</option><option value="gray">Gray</option></select></label>
+          <label>Pinboard<select id="setting-board"><option value="paper">Paper</option><option value="white">White</option><option value="cream">Cream</option><option value="blue">Blue</option><option value="green">Green</option><option value="pink">Pink</option><option value="gray">Gray</option></select></label>
+          <label>Accent<select id="setting-accent"><option value="lime">Lime</option><option value="gold">Gold</option><option value="blue">Blue</option><option value="pink">Pink</option><option value="lavender">Lavender</option></select></label>
+        </fieldset>
+
+        <fieldset class="settings-group">
+          <legend>Typography</legend>
+          <label>Interface font<select id="setting-ui-font"><option value="system">System</option><option value="arial">Arial</option><option value="verdana">Verdana</option><option value="georgia">Georgia</option><option value="mono">Monospace</option></select></label>
+          <label>Highlight text<select id="setting-text-size"><option value="12">12 px</option><option value="13">13 px</option><option value="14">14 px</option><option value="15">15 px</option><option value="16">16 px</option></select></label>
+        </fieldset>
+
+        <fieldset class="settings-group">
+          <legend>Layout</legend>
+          <label>Density<select id="setting-density"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label>
+          <label>Corners<select id="setting-corners"><option value="soft">Soft</option><option value="square">Square</option><option value="round">Rounded</option></select></label>
+          <label>Shadows<select id="setting-shadows"><option value="full">Full</option><option value="soft">Soft</option><option value="none">None</option></select></label>
+          <label>Motion<select id="setting-motion"><option value="standard">Standard</option><option value="reduced">Reduced</option></select></label>
+        </fieldset>
+
+        <fieldset class="settings-group">
+          <legend>Accessibility</legend>
+          <label>High contrast<select id="setting-high-contrast"><option value="off">Off</option><option value="on">On</option></select></label>
+          <label>Strong focus<select id="setting-strong-focus"><option value="off">Off</option><option value="on">On</option></select></label>
+          <label>Button feedback<select id="setting-feedback"><option value="on">Tactile</option><option value="off">Off</option></select></label>
+        </fieldset>
+      </div>
+
+      <div class="settings-actions">
+        <button id="settings-reset-btn" type="button">Reset Defaults</button>
+        <button id="settings-cancel-btn" type="button">Cancel</button>
+        <button id="settings-apply-btn" type="button">Apply</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Edit Dialog -->
+  <div id="edit-highlight-overlay" class="modal-backdrop" hidden>
+    <section class="edit-dialog" role="dialog" aria-modal="true" aria-labelledby="edit-highlight-title" aria-describedby="edit-highlight-help">
+      <div class="settings-heading">
+        <div>
+          <h2 id="edit-highlight-title">Edit Highlight</h2>
+          <p id="edit-highlight-help">Changes stay local and are included in future exports.</p>
+        </div>
+        <button id="edit-highlight-close" class="icon-button" type="button" aria-label="Close highlight editor">×</button>
+      </div>
+      <div class="edit-grid">
+        <label>Source title<input id="edit-highlight-page-title" type="text" maxlength="300" autocomplete="off"></label>
+        <label>Color<input id="edit-highlight-color" type="text" maxlength="80" autocomplete="off" aria-describedby="edit-color-help"></label>
+        <span id="edit-color-help" class="visually-hidden">Use a named color, hexadecimal color, RGB color, or HSL color.</span>
+        <label>Color name<input id="edit-highlight-color-name" type="text" maxlength="80" autocomplete="off"></label>
+        <label class="edit-wide">Highlighted text<textarea id="edit-highlight-text" maxlength="100000" rows="6"></textarea></label>
+        <label class="edit-wide">Note<textarea id="edit-highlight-note" maxlength="100000" rows="6"></textarea></label>
+        <label class="check-label edit-wide"><input id="edit-highlight-pinned" type="checkbox"> Pin to pinboard</label>
+      </div>
+      <div class="settings-actions">
+        <button id="edit-highlight-open" type="button">Open Source</button>
+        <button id="edit-highlight-cancel" type="button">Cancel</button>
+        <button id="edit-highlight-save" type="button">Save Changes</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Title Dialog -->
+  <div id="edit-title-overlay" class="modal-backdrop" hidden>
+    <section class="title-dialog" role="dialog" aria-modal="true" aria-labelledby="edit-title-heading" aria-describedby="edit-title-help">
+      <div class="settings-heading">
+        <div>
+          <h2 id="edit-title-heading">Edit Source Title</h2>
+          <p id="edit-title-help">The new title is applied to every highlight from this source.</p>
+        </div>
+        <button id="edit-title-close" class="icon-button" type="button" aria-label="Close source title editor">×</button>
+      </div>
+      <label class="dialog-label" for="edit-source-title">Source title</label>
+      <input id="edit-source-title" type="text" maxlength="300" autocomplete="off">
+      <div class="settings-actions">
+        <button id="edit-title-cancel" type="button">Cancel</button>
+        <button id="edit-title-save" type="button">Save Title</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="aria-live" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <script src="transfer.js"></script>
+  <script src="board-export.js"></script>
+  <script src="ui-settings.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
